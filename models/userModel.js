@@ -99,6 +99,6 @@ userSchema.methods.resetTokenGen = function () {
   return resetToken;
 };
 
-const User = new model('User', userSchema);
+const User = model('User', userSchema);
 
 module.exports = User;
