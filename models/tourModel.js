@@ -77,7 +77,37 @@ const tourSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
       select: false
-    }
+    },
+    startLocation: {
+      //geoJson
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point']
+      },
+      coordinates: [Number],
+      address: String,
+      description: String
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point']
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number
+      }
+    ],
+    guides: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ]
   },
   {
     toJSON: {
@@ -99,6 +129,22 @@ tourSchema.pre('save', function (next) {
   });
   next();
 });
+
+tourSchema.pre(/^find/, function (next) {
+  this.populate([
+    {
+      path: 'guides',
+      select: 'username email role'
+    }
+  ]);
+  next();
+});
+
+// tourSchema.pre('save', async function (next) {
+//   const guides = this.guides.map(async (id) => await User.findById(id));
+//   this.guides = await Promise.all(guides);
+//   next();
+// });
 
 // tourSchema.post('save', function (doc, next) {
 //   console.log(doc);
