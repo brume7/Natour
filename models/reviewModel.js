@@ -40,6 +40,17 @@ const reviewSchema = new Schema(
   }
 );
 
+reviewSchema.pre(/^find/, function (next) {
+  this.populate([
+    {
+      path: 'user',
+      select: ' username email photo'
+    }
+  ]);
+
+  next();
+});
+
 const Review = model('Review', reviewSchema);
 
 module.exports = Review;

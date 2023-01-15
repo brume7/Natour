@@ -122,6 +122,12 @@ const tourSchema = new mongoose.Schema(
 tourSchema.virtual('durationWeeks').get(function () {
   if (this.duration) return this.duration / 7;
 });
+//populating virtually
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id'
+});
 
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, {
