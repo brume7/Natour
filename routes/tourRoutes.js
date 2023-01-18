@@ -1,5 +1,6 @@
 const express = require('express');
 const { protect, restrictTo } = require('../controllers/authController');
+const { getAllReviews, createReview } = require('../controllers/reviewController');
 const {
   getAllTours,
   createTour,
@@ -10,6 +11,7 @@ const {
   getTourStats,
   getMonthlyPlan
 } = require('./../controllers/tourController');
+const reviewRouter = require('./reviewRoutes');
 
 const router = express.Router();
 
@@ -24,5 +26,7 @@ router
   .get(protect, getTour)
   .patch(protect, restrictTo('admin', 'lead-guide', 'guide'), updateTour)
   .delete(protect, restrictTo('admin', 'lead-guide'), deleteTour);
+
+router.use('/:tourId/reviews', reviewRouter);
 
 module.exports = router;

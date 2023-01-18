@@ -4,8 +4,9 @@ const catchAsync = require('../utils/catchAsync');
 const filterObj = require('../utils/filterObj');
 
 exports.createReview = catchAsync(async (req, res, next) => {
-  const filteredBody = filterObj(req.body, 'review', 'rating', 'tour');
-  filteredBody.user = req.user._id;
+  const filteredBody = filterObj(req.body, 'review', 'rating', 'tour', 'user');
+  filteredBody.user = !filteredBody.user ? req.user._id : filteredBody.user;
+  filteredBody.tour = !filteredBody.tour ? req.params.tourId : filteredBody.tour;
   const review = await Review.create(filteredBody);
   res.status(201).json({
     status: 'success',
