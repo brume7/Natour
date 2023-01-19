@@ -2,9 +2,10 @@ const Review = require('../models/reviewModel');
 const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
 const filterObj = require('../utils/filterObj');
+const { deleteOne, updateOne } = require('./factoryController');
 
 exports.createReview = catchAsync(async (req, res, next) => {
-  const filteredBody = filterObj(req.body, 'review', 'rating', 'tour', 'user');
+  const filteredBody = filterObj(req.body, 'review', 'rating', 'tour');
   filteredBody.user = !filteredBody.user ? req.user._id : filteredBody.user;
   filteredBody.tour = !filteredBody.tour ? req.params.tourId : filteredBody.tour;
   const review = await Review.create(filteredBody);
@@ -15,7 +16,9 @@ exports.createReview = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllReviews = catchAsync(async (req, res, next) => {
-  const features = new APIFeatures(Review.find(), req.query).filter().sort().limitFields().pagination();
+  const filter = req.params.tourId ? { tour: req.params.tourId } : {};
+
+  const features = new APIFeatures(Review.find(filter), req.query).filter().sort().limitFields().pagination();
   const reviews = await features.query;
   res.status(200).json({
     status: 'success',
@@ -24,3 +27,6 @@ exports.getAllReviews = catchAsync(async (req, res, next) => {
     requestedAt: req.requestTime
   });
 });
+
+exports.updateReview = updateOne(Review);
+exports.deleteReview = deleteOne(Review);

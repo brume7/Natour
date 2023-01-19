@@ -3,6 +3,7 @@ const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const filterObj = require('../utils/filterObj');
 const User = require('./../models/userModel');
+const { deleteOne, updateOne, createOne } = require('./factoryController');
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const features = new APIFeatures(User.find(), req.query).filter().sort().limitFields().pagination();
@@ -15,12 +16,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
     requestedAt: req.requestTime
   });
 });
-exports.createUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'route is not defined'
-  });
-};
+exports.createUser = createOne(User);
 exports.getUser = catchAsync(async ({ params }, res, next) => {
   const { id } = params;
   const user = await User.findOne({ _id: id });
@@ -34,18 +30,8 @@ exports.getUser = catchAsync(async ({ params }, res, next) => {
     data: user
   });
 });
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'route is not defined'
-  });
-};
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'route is not defined'
-  });
-};
+exports.updateUser = updateOne(User);
+exports.deleteUser = deleteOne(User);
 
 //user personal controllers
 exports.updateMe = catchAsync(async (req, res, next) => {
