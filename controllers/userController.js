@@ -3,19 +3,9 @@ const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const filterObj = require('../utils/filterObj');
 const User = require('./../models/userModel');
-const { deleteOne, updateOne, createOne } = require('./factoryController');
+const { deleteOne, updateOne, createOne, getAll } = require('./factoryController');
 
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const features = new APIFeatures(User.find(), req.query).filter().sort().limitFields().pagination();
-  const users = await features.query;
-
-  res.status(200).json({
-    status: 'success',
-    results: users.length,
-    data: { users },
-    requestedAt: req.requestTime
-  });
-});
+exports.getAllUsers = getAll(User);
 exports.createUser = createOne(User);
 exports.getUser = catchAsync(async ({ params }, res, next) => {
   const { id } = params;

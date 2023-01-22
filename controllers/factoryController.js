@@ -1,3 +1,4 @@
+const APIFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
@@ -39,5 +40,18 @@ exports.createOne = (Model) =>
       data: {
         data: newDoc
       }
+    });
+  });
+
+exports.getAll = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const filter = req.params.tourId ? { tour: req.params.tourId } : {}; // small hack for reviews
+    const features = new APIFeatures(Model.find(filter), req.query).filter().sort().limitFields().pagination();
+    const docs = await features.query;
+    res.status(200).json({
+      status: 'success',
+      results: docs.length,
+      data: { docs },
+      requestedAt: req.requestTime
     });
   });

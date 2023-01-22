@@ -2,7 +2,7 @@ const Review = require('../models/reviewModel');
 const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
 const filterObj = require('../utils/filterObj');
-const { deleteOne, updateOne } = require('./factoryController');
+const { deleteOne, updateOne, getAll } = require('./factoryController');
 
 exports.createReview = catchAsync(async (req, res, next) => {
   const filteredBody = filterObj(req.body, 'review', 'rating', 'tour');
@@ -15,16 +15,19 @@ exports.createReview = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getAllReviews = catchAsync(async (req, res, next) => {
-  const filter = req.params.tourId ? { tour: req.params.tourId } : {};
+exports.getAllReviews = getAll(Review);
 
-  const features = new APIFeatures(Review.find(filter), req.query).filter().sort().limitFields().pagination();
-  const reviews = await features.query;
+exports.getReview = catchAsync(async ({ params }, res, next) => {
+  const { id } = params;
+  const review = await Review.findOne({ _id: id });
+
+  if (!review) {
+    return next(new AppError('Review not found', 404));
+  }
+
   res.status(200).json({
     status: 'success',
-    results: reviews.length,
-    data: { reviews },
-    requestedAt: req.requestTime
+    data: review
   });
 });
 
