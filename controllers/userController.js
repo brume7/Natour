@@ -1,15 +1,12 @@
-const APIFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const filterObj = require('../utils/filterObj');
 const User = require('./../models/userModel');
 const { deleteOne, updateOne, createOne, getAll } = require('./factoryController');
 
-exports.getAllUsers = getAll(User);
-exports.createUser = createOne(User);
 exports.getUser = catchAsync(async ({ params }, res, next) => {
   const { id } = params;
-  const user = await User.findOne({ _id: id });
+  const user = await User.findOne({ _id: id }).select('-passwordChangedAt -__v -role');
 
   if (!user) {
     return next(new AppError('User not found', 404));
@@ -20,10 +17,16 @@ exports.getUser = catchAsync(async ({ params }, res, next) => {
     data: user
   });
 });
+
+exports.getAllUsers = getAll(User);
+exports.createUser = createOne(User);
 exports.updateUser = updateOne(User);
 exports.deleteUser = deleteOne(User);
-
 //user personal controllers
+exports.getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
 exports.updateMe = catchAsync(async (req, res, next) => {
   const filteredBody = filterObj(req.body, 'photo', 'username', 'email');
 

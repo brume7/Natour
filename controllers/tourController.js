@@ -3,7 +3,6 @@ const Tour = require('./../models/tourModel');
 const catchAsync = require('./../utils/catchAsync');
 const { deleteOne, updateOne, createOne, getAll } = require('./factoryController');
 
-exports.getAllTours = getAll(Tour);
 exports.getTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findById(req.params.id).populate([
     {
@@ -23,6 +22,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
   });
 });
 exports.createTour = createOne(Tour);
+exports.getAllTours = getAll(Tour);
 exports.updateTour = updateOne(Tour);
 exports.deleteTour = deleteOne(Tour);
 

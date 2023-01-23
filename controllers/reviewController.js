@@ -15,8 +15,6 @@ exports.createReview = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getAllReviews = getAll(Review);
-
 exports.getReview = catchAsync(async ({ params }, res, next) => {
   const { id } = params;
   const review = await Review.findOne({ _id: id });
@@ -31,5 +29,6 @@ exports.getReview = catchAsync(async ({ params }, res, next) => {
   });
 });
 
+exports.getAllReviews = getAll(Review);
 exports.updateReview = updateOne(Review);
 exports.deleteReview = deleteOne(Review);
