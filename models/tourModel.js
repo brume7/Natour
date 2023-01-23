@@ -140,7 +140,7 @@ tourSchema.pre(/^find/, function (next) {
   this.populate([
     {
       path: 'guides',
-      select: 'username email role'
+      select: 'name email role'
     }
   ]);
   next();

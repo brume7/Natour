@@ -36,9 +36,9 @@ const createSendToken = (user, statusCode, res, showUser) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
-  const { username, email, password, passwordConfirm, passwordChangedAt } = req.body;
+  const { name, email, password, passwordConfirm, passwordChangedAt } = req.body;
   const newUser = await User.create({
-    username,
+    name,
     email,
     password,
     passwordConfirm,
@@ -49,10 +49,10 @@ exports.signup = catchAsync(async (req, res, next) => {
   createSendToken(newUser, 201, res, true);
 });
 exports.login = catchAsync(async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
 
   if (!email | !password) {
-    return next(new AppError(' email, username or password required', 404));
+    return next(new AppError(' email or password required', 404));
   }
 
   const user = await User.findOne({ email, active: { $eq: true } }).select('+password');

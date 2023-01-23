@@ -5,13 +5,12 @@ const crypto = require('crypto');
 const AppError = require('../utils/appError');
 
 const userSchema = new Schema({
-  username: {
+  name: {
     type: String,
-    required: [true, 'user must have a username'],
+    required: [true, 'user must have a name'],
     minlength: 5,
     maxlength: 30,
-    trim: true,
-    unique: true
+    trim: true
   },
   email: {
     type: String,
