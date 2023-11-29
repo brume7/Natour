@@ -175,9 +175,16 @@ tourSchema.post(/^find/, function (docs, next) {
 });
 
 tourSchema.pre('aggregate', function (next) {
-  this._pipeline.unshift({
-    $match: { secretTour: { $ne: true } }
-  });
+  if (this._pipeline[0]['$geoNear']) {
+    this._pipeline.push({
+      $match: { secretTour: { $ne: true } }
+    });
+  } else {
+    this._pipeline.unshift({
+      $match: { secretTour: { $ne: true } }
+    });
+  }
+
   next();
 });
 

@@ -134,5 +134,30 @@ exports.getToursDistances = catchAsync(async ({ params }, res, next) => {
   if (!latitude || !longitude) {
     next(new AppError('Longitude and latitude required', 400));
   }
-  const tours = await Tour.aggregate({});
+  const distances = await Tour.aggregate([
+    {
+      $geoNear: {
+        near: {
+          type: 'Point',
+          coordinates: [longitude * 1, latitude * 1]
+        },
+        distanceField: 'distance',
+        distanceMultiplier: unit == 'km' ? 0.001 : 0.000621371
+      }
+    },
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        distance: 1,
+        ratingsAverage: 1,
+        ratingsQuantity: 1,
+        price: 1
+      }
+    }
+  ]);
+  res.status(200).json({
+    status: 'success',
+    data: { distances }
+  });
 });
