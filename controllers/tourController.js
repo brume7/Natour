@@ -101,3 +101,38 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
     data: { plan }
   });
 });
+
+// /tours-within/:distance/center/:latlng/unit/:unit
+// /tours-within/233/center/9.110072,7.427556/unit/mi
+exports.getToursWithin = catchAsync(async (req, res, next) => {
+  const { distance, latlng, unit } = req.params;
+  let [latitude, longitude] = latlng.split(',');
+
+  if (!latitude || !longitude) {
+    next(new AppError('Longitude and latitude required', 400));
+  }
+
+  const radius = unit == 'mi' ? distance / 3959 : distance / 6371;
+
+  const tours = await Tour.find({
+    startLocation: {
+      $geoWithin: { $centerSphere: [[longitude, latitude], radius] }
+    }
+  });
+
+  res.status(200).json({
+    results: tours.length || 0,
+    status: 'success',
+    data: tours
+  });
+});
+
+exports.getToursDistances = catchAsync(async ({ params }, res, next) => {
+  const { latlng, unit } = params;
+  let [latitude, longitude] = latlng.split(',');
+
+  if (!latitude || !longitude) {
+    next(new AppError('Longitude and latitude required', 400));
+  }
+  const tours = await Tour.aggregate({});
+});

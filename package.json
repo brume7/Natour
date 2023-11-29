@@ -8,6 +8,7 @@
     "start:dev": "nodemon server.js",
     "start:prod": "SET NODE_ENV=production&&nodemon server.js",
     "start": "nodemon server.js",
+    "import:data": "node dev-data/data/importer.js",
     "debug": "ndb server.js"
   },
   "author": "brumizzy",

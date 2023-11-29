@@ -1,4 +1,6 @@
 const { Schema, model } = require('mongoose');
+const Tour = require('./tourModel');
+const AppError = require('../utils/appError');
 
 const reviewSchema = new Schema(
   {
@@ -40,6 +42,13 @@ const reviewSchema = new Schema(
   }
 );
 
+reviewSchema.index(
+  { tour: 1, user: 1 },
+  {
+    unique: true
+  }
+);
+
 reviewSchema.pre(/^find/, function (next) {
   this.populate([
     {
@@ -49,6 +58,60 @@ reviewSchema.pre(/^find/, function (next) {
   ]);
 
   next();
+});
+
+reviewSchema.statics.calcAverageRatings = async function (tour) {
+  try {
+    const stats = await this.aggregate([
+      {
+        $match: { tour }
+      },
+      {
+        $group: {
+          _id: '$tour',
+          nRating: { $sum: 1 },
+          avgRating: {
+            $avg: '$rating'
+          }
+        }
+      }
+    ]);
+    const updatedTour = await Tour.findOneAndUpdate(
+      { _id: tour },
+      {
+        ratingsAverage: stats[0].avgRating,
+        ratingsQuantity: stats[0].nRating
+      }
+    );
+
+    if (!updatedTour) {
+      throw new AppError('Tour does not exist', 404);
+    }
+  } catch (err) {
+    throw new AppError('Tour does not exist', 400);
+  }
+};
+
+reviewSchema.pre('save', function (next) {
+  this.constructor
+    .calcAverageRatings(this.tour)
+    .then(() => {
+      next();
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
+reviewSchema.post('save', function (doc, next) {
+  this.constructor
+    .calcAverageRatings(doc.tour)
+    .then(() => {
+      next();
+    })
+    .catch((err) => {
+      next(err);
+    });
 });
 
 const Review = model('Review', reviewSchema);
