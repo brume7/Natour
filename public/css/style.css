@@ -42,7 +42,8 @@ body {
 
 .main {
   background-color: #f7f7f7;
-  padding: 8rem 6rem;
+  padding-top: 8rem;
+  padding-bottom: 8rem;
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
@@ -991,11 +992,7 @@ body {
 }
 
 .card-container {
-  max-width: 120rem;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 7rem;
 }
 
 .card {

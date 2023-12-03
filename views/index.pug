@@ -1,22 +1,44 @@
-doctype html
-html(lang="en")
-    head
-        meta(charset="UTF-8")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        meta(name="description", content="tour website for adventures")
-        link(rel='shortcut icon', type='image/*', href='/img/favicon.png')
-        link(rel="stylesheet", href="/css/style.css")
-        link(href='https://fonts.googleapis.com/css?family=Lato:300,300i,700' rel='stylesheet')
-        script(src="https://cdn.tailwindcss.com" nonce=nonce) 
-        title=title
-    body(class='bg-[#f7f7f7]')
-        header(class='bg-[#444444]')
-            nav(class='h-[60px] mx-auto max-w-[1440px] flex justify-between items-center px-1 xl:px-0')
-                a(href="")
-                    img(src="/img/logo-green.png", alt="logo", class="h-[40px]" )
-                div(class='text-[#f7f7f7] flex gap-x-[20px]')
-                    a(href="", class='h-[40px] flex items-center justify-center w-[100px]') LOG IN 
-                    a(href="", class="border-[2px] border-[#F7F7F7] rounded-full h-[40px] flex items-center justify-center w-[100px] hover:bg-[#f7f7f7] hover:text-[#444444]" ) SIGN UP 
-        main
-            section(class='flex flex-wrap mx-auto max-w-[1440px] min-h-[calc(100vh-283px)]')
-            
+extends base
+
+block content
+    main.main.mb-4
+      .card-container(class='mx-auto max-w-[1440px] min-h-[calc(100vh-283px)]  px-1 2xl:px-0 flex justify-center xl:justify-between flex-wrap gap-y-[50px] gap-x-[40px] 2xl:gap-x-4')
+        each tour in tours
+          .card(class='!min-w-[329px] w-[550px]  2xl:w-[429px] mx-0')
+            .card__header
+              .card__picture
+                .card__picture-overlay &nbsp;
+                img.card__picture-img(src='/img/tours/'+tour.imageCover, alt=tour.images[0])
+              h3.heading-tertirary
+                span #{tour.name}
+
+            .card__details
+              h4.card__sub-heading #{tour.difficulty} #{tour.duration}-day tour
+              p.card__text #{tour.summary}
+              .card__data
+                svg.card__icon
+                  use(xlink:href='img/icons.svg#icon-map-pin')
+                span #{tour.startLocation.description}
+              .card__data
+                svg.card__icon
+                  use(xlink:href='img/icons.svg#icon-calendar')
+                span #{(new Date(tour.startDates[0])).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+              .card__data
+                svg.card__icon
+                  use(xlink:href='img/icons.svg#icon-flag')
+                span #{tour.locations.length} stops
+              .card__data
+                svg.card__icon
+                  use(xlink:href='img/icons.svg#icon-user')
+                span #{tour.maxGroupSize} people
+
+            .card__footer
+              p
+                span.card__footer-value $#{tour.price}
+                | 
+                span.card__footer-text per person
+              p.card__ratings
+                span.card__footer-value #{tour.ratingsAverage}
+                | 
+                span.card__footer-text rating (#{tour.ratingsQuantity})
+              a.btn.btn--green.btn--small(href=`/tour/${tour.slug}`) Details

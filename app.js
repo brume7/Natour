@@ -4,13 +4,13 @@ const morgan = require('morgan');
 const tourRouter = require(`${__dirname}/routes/tourRoutes`);
 const userRouter = require(`${__dirname}/routes/userRoutes`);
 const reviewRouter = require(`${__dirname}/routes/reviewRoutes`);
+const viewRouter = require(`${__dirname}/routes/viewRoutes`);
 const errorController = require('./controllers/errorController');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
-const nonce = require('crypto').randomBytes(16).toString('base64');
 const appError = require('./utils/appError');
 
 const app = express();
@@ -71,26 +71,20 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/', (req, res) => {
-  res.status(200).render('index', {
-    title: 'Natours | Exciting tours for adventurous people',
-    nonce: nonce
-  });
-});
-
 // limit request from same ip
 app.use('/api', limiter);
 
 //2) Routes
 
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
 
 app.all('*', (req, res, next) => {
-  const err = new appError(`can't find ${req.originalUrl} on this server`, 404);
-
-  next(err);
+  res.status(200).render('404', {
+    title: 'Natours | 404'
+  });
 });
 
 app.use(errorController);
