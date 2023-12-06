@@ -1,0 +1,20 @@
+extends base
+
+block append head
+    script(src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js")
+
+block content
+    main.relative
+        #alert-box.absolute(data-error=`${error}` class='fixed hidden text-white right-3 top-[60px] min-h-[60px] max-w-[100vw] w-[300px] sm:w-[400px] z-50 rounded-[5px] text-lg font-bold flex flex-col justify-center pl-5')
+        section(class='flex flex-wrap mx-auto max-w-[1440px] min-h-[calc(100vh-283px)] px-1 xl:px-0 items-center justify-center pb-[10px]')
+            .bg-white#login-form-con(class='min-h-[500px] max-w-[95vw] w-[500px] shadow-2xl pt-[50px] px-[10px] sm:px-[30px] rounded-[5px] mb-[30px]')
+                h1.text-3xl.font-bold.font-sans(class='text-[#ffffff00] bg-gradient-to-r from-[#7dd56f] to-[#28b487] inline-block bg-clip-text uppercase') Welcome back to Natours
+                form#login-form(class='mt-[50px]')
+                    label(for="email" class='flex flex-col gap-[10px] mb-[30px] font-bold text-black') Email Address
+                        input.form__input(name="email" type="email" id='email' placeholder='me@exaple.com', required, class='h-[50px] text-lg')
+                    label(for="password" class='flex flex-col gap-[10px] mb-[30px] font-bold text-black') Password
+                        input.form__input(name="password" type="password" id='password' placeholder='••••••••' minlength='8' required, class='h-[50px] text-lg')
+                    button(class='h-[40px] w-[100px] text-2xl text-white bg-[#55c57a] rounded-full' type='submit') Login
+
+block append scripts
+    script(src="/js/login.js") 

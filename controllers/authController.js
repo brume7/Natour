@@ -8,7 +8,7 @@ const sendEmail = require('../utils/email');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.TOKEN_PASSWORD, {
-    expiresIn: process.env.TOKEN_EXPIRATION
+    expiresIn: process.env.TOKEN_EXPIRATION,
   });
 };
 
@@ -17,7 +17,7 @@ const createSendToken = (user, statusCode, res, showUser) => {
 
   const cookieOptions = {
     expires: new Date(Date.now() + process.env.TOKEN_COOKIE_EXPIRATION * 24 * 60 * 60 * 1000),
-    httpOnly: true
+    httpOnly: true,
   };
 
   if (process.env.NODE_ENV == 'production') cookieOptions.secure = true;
@@ -29,9 +29,9 @@ const createSendToken = (user, statusCode, res, showUser) => {
     token,
     data: showUser
       ? {
-          user
+          user,
         }
-      : undefined
+      : undefined,
   });
 };
 
@@ -42,7 +42,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     email,
     password,
     passwordConfirm,
-    passwordChangedAt
+    passwordChangedAt,
   }); //remove password changed at
   newUser.password = undefined;
 
@@ -57,12 +57,12 @@ exports.login = catchAsync(async (req, res, next) => {
 
   const user = await User.findOne({ email, active: { $eq: true } }).select('+password');
   if (!user) {
-    return next(new AppError('Incorrect credentials', 401));
+    return next(new AppError('Incorrect email or password', 401));
   }
   const isCorrectPassword = await user.isCorrectPassword(password);
 
   if (!isCorrectPassword) {
-    return next(new AppError('Incorrect credentials', 401));
+    return next(new AppError('Incorrect email or password', 401));
   }
   user.password = undefined;
 
@@ -76,6 +76,8 @@ exports.protect = catchAsync(async (req, res, next) => {
   let token;
   if (headers.authorization && headers.authorization.startsWith('Bearer')) {
     token = headers.authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
 
   if (!token) {
@@ -96,6 +98,26 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = currentUser;
   next(); //grant access
 });
+
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  if (req.cookies.jwt) {
+    const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.TOKEN_PASSWORD);
+
+    const currentUser = await User.findOne({ _id: decoded.id, active: { $eq: true } });
+    if (!currentUser) {
+      return next();
+    }
+    //user changed password after jwt
+    if (currentUser.changedPasswordAfter(decoded.iat)) {
+      return next();
+    }
+
+    req.locals.user = currentUser;
+    next(); //grant access
+  }
+  next();
+});
+
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
@@ -130,7 +152,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     await sendEmail({
       email: user.email,
       subject: 'Reset password token (valid for 10 min)',
-      message
+      message,
     });
   } catch (error) {
     user.passwordResetToken = undefined;
@@ -141,7 +163,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    message: 'Token sent to email'
+    message: 'Token sent to email',
   });
 });
 exports.resetPassword = catchAsync(async (req, res, next) => {

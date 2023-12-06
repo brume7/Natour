@@ -12,6 +12,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const appError = require('./utils/appError');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const limiter = rateLimit({
@@ -34,8 +35,18 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        'script-src': ["'self'", 'https://cdn.tailwindcss.com'],
-        'style-src': ["'self'", 'https://cdn.tailwindcss.com', "'unsafe-inline'", 'https://fonts.googleapis.com']
+        defaultSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", '*'],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", '*', 'blob:'], // Add 'blob:'
+        styleSrc: ["'self'", "'unsafe-inline'", '*'],
+        fontSrc: ["'self'", '*'],
+        imgSrc: ["'self'", '*', 'data:'],
+        connectSrc: ["'self'", '*'],
+        mediaSrc: ["'self'", '*'],
+        objectSrc: ["'none'"],
+        frameSrc: ['*'],
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
+        frameAncestors: ["'self'"]
       }
     },
     crossOriginResourcePolicy: false,
@@ -53,6 +64,9 @@ app.use(
   })
 );
 
+//cookie parser
+app.use(cookieParser());
+
 // data sanitization against no-sql query injection
 app.use(mongoSanitize());
 
@@ -68,6 +82,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
+  console.log(req.cookies);
   next();
 });
 

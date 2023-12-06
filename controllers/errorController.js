@@ -18,20 +18,20 @@ const sendErrorDev = (err, res) => {
     status: err.status,
     error: err,
     message: err.message,
-    errorStack: err.stack
+    errorStack: err.stack,
   });
 };
 const sendErrorProd = (err, res) => {
   if (err.isOperational) {
     res.status(err.statusCode).json({
       status: err.status,
-      message: err.message
+      message: err.message,
     });
   } else {
     console.error(`error 💥 ${err}`);
     res.status(500).json({
       status: 'error',
-      message: 'Something went wrong'
+      message: 'Something went wrong',
     });
   }
 };
