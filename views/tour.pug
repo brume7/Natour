@@ -2,10 +2,12 @@ extends base
 
 block append head
   script(src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js')
+  script(src="https://kit.fontawesome.com/ea3c4f04e0.js" crossorigin="anonymous") 
   link(href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet')
 
 block content
-  main.mb-4
+  main.mb-4.relative
+    #alert-box.absolute(data-error=`${error}` class='fixed hidden text-white right-3 top-[60px] min-h-[60px] max-w-[100vw] w-[300px] sm:w-[400px] z-50 rounded-[5px] text-lg font-bold flex flex-col justify-center pl-5')
     section.bg-white 
       div(class='mx-auto  h-[500px]  relative')
         .header__hero
@@ -58,7 +60,11 @@ block content
     section.section-reviews
       .reviews
         each review in tour.reviews
-          .reviews__card
+          .reviews__card.relative
+            if user
+              - if (user.id == review.user['id'] || user.role =='admin'){
+              i.fa-solid.absolute(class='right-[2rem] top-[2rem] text-[#dd0000] cursor-pointer text-lg fa-trash hover:fa-trash-can' data-id=`${review.id}` data-tourId=`${tour.id}` id='delete-review-btn')
+              -}
             .reviews__avatar
               img.reviews__avatar-img(src=`${review.user.photo ? '/img/users/'+review.user.photo : '/img/users/default.jpg'}`, alt=review.user.name)
               h6.reviews__user #{review.user.name}

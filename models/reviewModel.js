@@ -92,16 +92,16 @@ reviewSchema.statics.calcAverageRatings = async function (tour) {
   }
 };
 
-reviewSchema.pre('save', function (next) {
-  this.constructor
-    .calcAverageRatings(this.tour)
-    .then(() => {
-      next();
-    })
-    .catch((err) => {
-      next(err);
-    });
-});
+// reviewSchema.pre('save', function (next) {
+//   this.constructor
+//     .calcAverageRatings(this.tour)
+//     .then(() => {
+//       next();
+//     })
+//     .catch((err) => {
+//       next(err);
+//     });
+// });
 
 reviewSchema.post('save', function (doc, next) {
   this.constructor

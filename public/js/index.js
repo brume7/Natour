@@ -2,6 +2,7 @@ import '@babel/polyfill';
 import { login } from './login';
 import { mapFunc } from './mapbox';
 import { signUP } from './signUp';
+import { deleteReviewView } from './review';
 
 const mapDiv = document.getElementById('map');
 let alertClass =
@@ -54,4 +55,17 @@ if (signUpForm) {
 
     signUP(name, email, password, passwordConfirm, alertBox, alertClass);
   });
+}
+
+const delete_review_btns = document.querySelectorAll('#delete-review-btn');
+
+if (delete_review_btns.length) {
+  for (const el of delete_review_btns) {
+    el.addEventListener('click', async () => {
+      el.style.display = 'none';
+      await deleteReviewView(el.dataset.id, el.dataset.tourid, alertBox, alertClass);
+      el.style.display = 'inline';
+      location.reload();
+    });
+  }
 }

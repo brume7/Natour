@@ -20,7 +20,7 @@ const limiter = rateLimit({
   max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
   message: 'too many request from this ip, please try agian in an hour!',
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false // Disable the `X-RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
 // Set 'views' to the folder where your Pug files are stored
@@ -46,13 +46,13 @@ app.use(
         frameSrc: ['*'],
         baseUri: ["'self'"],
         formAction: ["'self'"],
-        frameAncestors: ["'self'"]
-      }
+        frameAncestors: ["'self'"],
+      },
     },
     crossOriginResourcePolicy: false,
     crossOriginEmbedderPolicy: false,
-    crossOriginOpenerPolicy: false
-  })
+    crossOriginOpenerPolicy: false,
+  }),
 );
 // dev logging
 if (process.env.NODE_ENV == 'development') app.use(morgan('dev'));
@@ -60,8 +60,8 @@ if (process.env.NODE_ENV == 'development') app.use(morgan('dev'));
 //body paser for rq.body
 app.use(
   express.json({
-    limit: '10kb'
-  })
+    limit: '10kb',
+  }),
 );
 
 //cookie parser
@@ -82,7 +82,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  console.log(req.cookies);
+  // console.log(req.cookies);
   next();
 });
 
@@ -98,7 +98,7 @@ app.use('/api/v1/reviews', reviewRouter);
 
 app.all('*', (req, res, next) => {
   res.status(200).render('404', {
-    title: 'Natours | 404'
+    title: 'Natours | 404',
   });
 });
 

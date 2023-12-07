@@ -10,39 +10,39 @@ const tourSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       maxlength: [40, 'Tour name must be less than 40 characters'],
-      minlength: [10, 'Tour name must be more than 10 characters']
+      minlength: [10, 'Tour name must be more than 10 characters'],
     },
     slug: String,
     duration: {
       type: Number,
-      required: [true, 'Tour must have a duration']
+      required: [true, 'Tour must have a duration'],
     },
     maxGroupSize: {
       type: Number,
-      required: [true, 'Tour must have the max group size']
+      required: [true, 'Tour must have the max group size'],
     },
     difficulty: {
       type: String,
       required: [true, 'Tour must have a difficulty'],
       enum: {
         values: ['easy', 'medium', 'difficult'],
-        message: 'Diffculty is either easy, medium and difficult'
-      }
+        message: 'Diffculty is either easy, medium and difficult',
+      },
     },
     ratingsAverage: {
       type: Number,
       default: 3.5,
       min: [1, 'value is less than minimum value allowed for ratings'],
       max: [5, 'value is more than maximum value allowed for ratings'],
-      set: (val) => Math.round(val * 10) / 10
+      set: (val) => Math.round(val * 10) / 10,
     },
     ratingsQuantity: {
       type: Number,
-      default: 0
+      default: 0,
     },
     price: {
       type: Number,
-      required: [true, 'Tour must have a price']
+      required: [true, 'Tour must have a price'],
     },
     priceDiscount: {
       type: Number,
@@ -50,74 +50,74 @@ const tourSchema = new mongoose.Schema(
         validator: function (val) {
           return val < this.price;
         },
-        message: 'Discount price({VALUE}) should not be more than price'
-      }
+        message: 'Discount price({VALUE}) should not be more than price',
+      },
     },
     summary: {
       type: String,
       required: [true, 'Tour must have a summary'],
-      trim: true
+      trim: true,
     },
     description: {
       type: String,
-      trim: true
+      trim: true,
     },
     imageCover: {
       type: String,
       required: [true, 'Tour must have a cover image'],
-      trim: true
+      trim: true,
     },
     images: [String],
     createdAt: {
       type: Date,
       default: Date.now(),
-      select: false
+      select: false,
     },
     startDates: [Date],
     secretTour: {
       type: Boolean,
       default: false,
-      select: false
+      select: false,
     },
     startLocation: {
       //geoJson
       type: {
         type: String,
         default: 'Point',
-        enum: ['Point']
+        enum: ['Point'],
       },
       coordinates: [Number],
       address: String,
-      description: String
+      description: String,
     },
     locations: [
       {
         type: {
           type: String,
           default: 'Point',
-          enum: ['Point']
+          enum: ['Point'],
         },
         coordinates: [Number],
         address: String,
         description: String,
-        day: Number
-      }
+        day: Number,
+      },
     ],
     guides: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-      }
-    ]
+        ref: 'User',
+      },
+    ],
   },
   {
     toJSON: {
-      virtuals: true
+      virtuals: true,
     },
     toObject: {
-      virtuals: true
-    }
-  }
+      virtuals: true,
+    },
+  },
 );
 
 tourSchema.index({ price: 1, ratingsAverage: -1 });
@@ -131,12 +131,12 @@ tourSchema.virtual('durationWeeks').get(function () {
 tourSchema.virtual('reviews', {
   ref: 'Review',
   foreignField: 'tour',
-  localField: '_id'
+  localField: '_id',
 });
 
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, {
-    lower: true
+    lower: true,
   });
   next();
 });
@@ -145,8 +145,8 @@ tourSchema.pre(/^find/, function (next) {
   this.populate([
     {
       path: 'guides',
-      select: 'name email role photo'
-    }
+      select: 'name email role photo',
+    },
   ]);
   next();
 });
@@ -169,7 +169,7 @@ tourSchema.pre(/^find/, function (next) {
 });
 
 tourSchema.post(/^find/, function (docs, next) {
-  console.log(`query took ${Date.now() - this.start}`);
+  // console.log(`query took ${Date.now() - this.start}`);
   //console.log(docs);
   next();
 });
@@ -177,11 +177,11 @@ tourSchema.post(/^find/, function (docs, next) {
 tourSchema.pre('aggregate', function (next) {
   if (this._pipeline[0]['$geoNear']) {
     this._pipeline.push({
-      $match: { secretTour: { $ne: true } }
+      $match: { secretTour: { $ne: true } },
     });
   } else {
     this._pipeline.unshift({
-      $match: { secretTour: { $ne: true } }
+      $match: { secretTour: { $ne: true } },
     });
   }
 
