@@ -1,10 +1,15 @@
 import axios from 'axios';
 
-export const login = async (email, password, alertBox, alertClass) => {
+export const signUP = async (name, email, password, passwordConfirm, alertBox, alertClass) => {
   try {
-    const user = await axios.post('/api/v1/users/login', {
+    if (password != passwordConfirm) {
+      throw new Error('Passwords do not match');
+    }
+    const user = await axios.post('/api/v1/users/signup', {
+      name,
       email,
       password,
+      passwordConfirm,
     });
     alertBox.removeAttribute('class');
     alertBox.setAttribute('class', alertClass + ' bg-[#55c57a] animate__slideInRight');
@@ -25,7 +30,11 @@ export const login = async (email, password, alertBox, alertClass) => {
     if (err.response) {
       alertBox.innerText = err.response.data.message;
     } else {
-      alertBox.innerText = 'check your internet connection';
+      if ((err.message = 'Passwords do not match')) {
+        alertBox.innerText = err.message;
+      } else {
+        alertBox.innerText = 'check your internet connection';
+      }
     }
     let alertTimeout = setTimeout(() => {
       alertBox.removeAttribute('class');

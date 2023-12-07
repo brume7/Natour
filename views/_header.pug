@@ -3,5 +3,11 @@ header(class='bg-[#444444]')
         a(href="/")
             img(src="/img/logo-green.png", alt="logo", class="h-[40px]" )
         div(class='text-[#f7f7f7] flex gap-x-[20px]')
-            a(href="/login", class='h-[40px] flex items-center justify-center w-[100px]') LOG IN 
-            a(href="/sign-up", class="border-[2px] border-[#F7F7F7] rounded-full h-[40px] flex items-center justify-center w-[100px] hover:bg-[#f7f7f7] hover:text-[#444444]" ) SIGN UP 
+            if user
+                a(href='/me' class='h-[40px] flex items-center justify-center w-[100px]')
+                    img.nav__user-img(src=`/img/users/${user.photo ? user.photo : 'default.jpg'}` alt='User photo' class='h-[30px] w-[30px]')
+                    span #{user.name.split(' ')[0]}
+                a(href='/logout' class='h-[40px] flex items-center justify-center w-[100px] cursor-pointer text-[#dd0000]') logout
+            else
+                a(href="/login", class='h-[40px] flex items-center justify-center w-[100px]') LOG IN 
+                a(href="/sign-up", class="border-[2px] border-[#F7F7F7] rounded-full h-[40px] flex items-center justify-center w-[100px] hover:bg-[#f7f7f7] hover:text-[#444444]" ) SIGN UP 

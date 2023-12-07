@@ -35,13 +35,26 @@ exports.getTourView = catchAsync(async (req, res) => {
 });
 
 exports.loginView = catchAsync(async (req, res) => {
+  if (res.locals.user) {
+    return res.redirect('/');
+  }
   return res.status(200).render('login', {
     title: `Natorus | Login`,
   });
 });
 
 exports.signUpView = catchAsync(async (req, res) => {
+  if (res.locals.user) {
+    return res.redirect('/');
+  }
   return res.status(200).render('signUp', {
     title: `Natorus | sign up`,
   });
+});
+
+exports.logout = catchAsync(async (req, res) => {
+  res.clearCookie('jwt'); // Replace 'yourCookieName' with the actual name of your cookie
+
+  // Redirect to '/'
+  res.redirect('/');
 });

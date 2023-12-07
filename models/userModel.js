@@ -10,29 +10,28 @@ const userSchema = new Schema({
     required: [true, 'user must have a name'],
     minlength: 5,
     maxlength: 30,
-    trim: true
+    trim: true,
   },
   email: {
     type: String,
     required: [true, 'user must have an email'],
     minlength: 5,
-    maxlength: 30,
     trim: true,
     unique: true,
     validate: [validator.isEmail, 'input must be an email'],
-    lowercase: true
+    lowercase: true,
   },
   photo: String,
   role: {
     type: String,
     enum: ['user', 'guide', 'lead-guide', 'admin'],
-    default: 'user'
+    default: 'user',
   },
   password: {
     type: String,
     required: [true, 'Password can not be empty'],
     minlength: 8,
-    select: false
+    select: false,
   },
   passwordConfirm: {
     type: String,
@@ -42,19 +41,19 @@ const userSchema = new Schema({
       validator: function (el) {
         return el === this.password;
       },
-      message: 'Passwords are not the same!'
-    }
+      message: 'Passwords are not the same!',
+    },
   },
   passwordChangedAt: {
-    type: Date
+    type: Date,
   },
   passwordResetToken: String,
   passwordResetExpires: Date,
   active: {
     type: Boolean,
     default: true,
-    select: false
-  }
+    select: false,
+  },
 });
 
 userSchema.pre('save', async function (next) {
