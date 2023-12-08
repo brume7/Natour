@@ -1,0 +1,42 @@
+extends base
+
+block content
+    main.relative
+        section(class='mx-auto max-w-[1440px] min-h-[calc(100vh-273px)] mb-[10px] flex  pr-1 2xl:pr-0 relative')
+            #alert-box.absolute(data-error=`${error}` class='fixed hidden text-white right-3 top-[60px] min-h-[60px] max-w-[100vw] w-[300px] sm:w-[400px] z-50 rounded-[5px] text-lg font-bold flex flex-col justify-center pl-5')
+            #profile-nav.min-h-full(class='w-[60px] bg-gradient-to-br from-[#7dd56f] to-[#28b487] flex flex-col lg:w-[320px] pt-[70px]')
+                ul.flex.flex-col(class='gap-y-[10px]')
+                    li(class=`pl-0 lg:pl-[30px] ${active == 'profile' ? 'active-board':''}`)
+                        a(href="#" class='flex lg:hidden justify-center')
+                            svg
+                                use(xlink:href='img/icons.svg#icon-settings')
+                        a(href='/me' class='hidden lg:flex')
+                            svg
+                                use(xlink:href='img/icons.svg#icon-settings')
+                            | Settings
+                    li(class=`pl-0 lg:pl-[30px] ${active == '' ? 'active-board':''}`)
+                        a(href="#" class='flex lg:hidden justify-center')
+                            svg
+                                use(xlink:href='img/icons.svg#icon-briefcase')
+                        a(href='#' class='hidden lg:flex')
+                            svg
+                                use(xlink:href='img/icons.svg#icon-briefcase')
+                            | My bookings
+                    li(class=`pl-0 lg:pl-[30px] ${active == '' ? 'active-board':''}`)
+                        a(href="#" class='flex lg:hidden justify-center')
+                            svg
+                                use(xlink:href='img/icons.svg#icon-star')
+                        a(href='#' class='hidden lg:flex')
+                            svg
+                                use(xlink:href='img/icons.svg#icon-star')
+                            | My reviews
+                    li(class=`pl-0 lg:pl-[30px] ${active == '' ? 'active-board':''}`)
+                        a(href="#" class='flex lg:hidden justify-center')
+                            svg
+                                use(xlink:href='img/icons.svg#icon-credit-card')
+                        a(href='#' class='hidden lg:flex')
+                            svg
+                                use(xlink:href='img/icons.svg#icon-credit-card')
+                            | Billing
+            .min-h-full.bg-white(class='w-full py-[70px]')
+                block board

@@ -64,7 +64,7 @@ block content
           .reviews__card.relative
             if user
               - if (user.id == review.user['id'] || user.role =='admin'){
-              - if (user.id == review.user['id']){ showCreateReview = false}
+              - if (user.id == review.user['id'] || user.role =='admin'){ showCreateReview = false}
               i.fa-solid.absolute(class='right-[2rem] top-[2rem] text-[#dd0000] cursor-pointer text-lg fa-trash hover:fa-trash-can' data-id=`${review.id}` data-tourId=`${tour.id}` id='delete-review-btn')
               -}
             .reviews__avatar

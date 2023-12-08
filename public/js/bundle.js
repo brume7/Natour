@@ -12207,32 +12207,38 @@ var postReviewView = exports.postReviewView = /*#__PURE__*/function () {
           }
           throw new Error('Please refresh an try again');
         case 5:
-          if (!review) {
-            _context2.next = 11;
+          if (!(review.length < 6)) {
+            _context2.next = 7;
             break;
           }
-          _context2.next = 8;
+          throw new Error('Review is short');
+        case 7:
+          if (!review) {
+            _context2.next = 13;
+            break;
+          }
+          _context2.next = 10;
           return _axios.default.post("/api/v1/tours/".concat(tour_id, "/reviews"), {
             rating: rating,
             review: review
           });
-        case 8:
+        case 10:
           res = _context2.sent;
-          _context2.next = 14;
+          _context2.next = 16;
           break;
-        case 11:
-          _context2.next = 13;
+        case 13:
+          _context2.next = 15;
           return _axios.default.post("/api/v1/tours/".concat(tour_id, "/reviews"), {
             rating: rating
           });
-        case 13:
+        case 15:
           _res = _context2.sent;
-        case 14:
+        case 16:
           location.reload();
-          _context2.next = 23;
+          _context2.next = 25;
           break;
-        case 17:
-          _context2.prev = 17;
+        case 19:
+          _context2.prev = 19;
           _context2.t0 = _context2["catch"](0);
           alertBox.removeAttribute('class');
           alertBox.setAttribute('class', alertClass + ' bg-[#dd0000] animate__slideInRight');
@@ -12246,11 +12252,11 @@ var postReviewView = exports.postReviewView = /*#__PURE__*/function () {
             alertBox.setAttribute('class', "".concat(alertClass, " hidden"));
             clearTimeout(alertTimeout);
           }, 3000);
-        case 23:
+        case 25:
         case "end":
           return _context2.stop();
       }
-    }, _callee2, null, [[0, 17]]);
+    }, _callee2, null, [[0, 19]]);
   }));
   return function postReviewView(_x5, _x6, _x7, _x8, _x9) {
     return _ref2.apply(this, arguments);

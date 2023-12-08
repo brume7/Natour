@@ -1,0 +1,25 @@
+extends baseDashboard
+
+block board
+    div(class='max-w-[100%] mx-auto w-[80%]')
+        h1.text-3xl.font-bold.font-sans(class='text-[#ffffff00] bg-gradient-to-r from-[#7dd56f] to-[#28b487] inline-block bg-clip-text uppercase') YOUR ACCOUNT SETTINGS 
+        form#update-me-form(class='mt-[50px] w-[500px] max-w-[100%]')
+            label(for="email" class='flex flex-col gap-[10px] mb-[30px] font-bold text-black') Email Address
+                input.form__input(name="email" type="email" id='email' placeholder='me@exaple.com', required, class='h-[50px] text-lg', readonly, value=`${user.email}`)
+            label(for="fullname" class='flex flex-col gap-[10px] mb-[30px] font-bold text-black') Full Name
+                input.form__input(name="fullname" type="text" id='fullname' placeholder='jonas', required, class='h-[50px] text-lg' minlength='5' maxlength='30' value=`${user.name}`)
+            .form__group.form__photo-upload
+                img.form__user-photo(src=`img/users/${user.photo ? user.photo : 'default.jpg'}`, alt='User photo', class='h-[60px] w-[60px]')
+                a.btn-text(href='') Choose new photo
+            button(class='h-[40px] w-[200px] text-lg text-white bg-[#55c57a] rounded-full block ml-auto font-sans font-semi-bold' type='submit') Save settings
+    .line &nbsp;
+    div(class='max-w-[100%] mx-auto w-[80%]')
+        h1.text-3xl.font-bold.font-sans(class='text-[#ffffff00] bg-gradient-to-r from-[#7dd56f] to-[#28b487] inline-block bg-clip-text uppercase') PASSWORD CHANGE 
+        form#update-password-form(class='mt-[50px] w-[500px] max-w-[100%]')
+            label(for="currPassword" class='flex flex-col gap-[10px] mb-[30px] font-bold text-black') Current password
+                input.form__input(name="currPassword" type="password" id='currPassword' placeholder='••••••••' minlength='8' required, class='h-[50px] text-lg')
+            label(for="password" class='flex flex-col gap-[10px] mb-[30px] font-bold text-black') Password
+                input.form__input(name="password" type="password" id='password' placeholder='••••••••' minlength='8' required, class='h-[50px] text-lg')
+            label(for="passwordConfirm" class='flex flex-col gap-[10px] mb-[30px] font-bold text-black') Password
+                input.form__input(name="passwordConfirm" type="password" id='passwordConfirm' placeholder='••••••••' minlength='8' required, class='h-[50px] text-lg')
+            button(class='h-[40px] w-[200px] text-lg text-white bg-[#55c57a] rounded-full block ml-auto font-sans font-semi-bold' type='submit') Save password

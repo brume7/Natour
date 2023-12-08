@@ -29,6 +29,9 @@ export const postReviewView = async (rating, review, tour_id, alertBox, alertCla
     if (!tour_id) {
       throw new Error('Please refresh an try again');
     }
+    if (review.length < 6) {
+      throw new Error('Review is short');
+    }
     if (review) {
       const res = await axios.post(`/api/v1/tours/${tour_id}/reviews`, {
         rating,

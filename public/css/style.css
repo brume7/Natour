@@ -720,6 +720,35 @@ body {
   padding: 0 8rem;
 }
 
+#profile-nav ul {
+  width: 100%;
+}
+#profile-nav ul li {
+  height: 44px;
+  width: 100%;
+  cursor: pointer;
+}
+
+#profile-nav ul li:hover {
+  border-left: 4px solid #fff !important;
+}
+
+.active-board {
+  border-left: 4px solid #fff !important;
+}
+
+#profile-nav ul li svg {
+  width: 19px;
+  fill: white;
+}
+#profile-nav ul li a {
+  align-items: center;
+  color: white;
+  column-gap: 20px;
+  font-size: 20px;
+  max-height: 44px !important;
+}
+
 .footer {
   background-color: #f7f7f7;
   padding: 6rem 0rem 3rem 0rem;

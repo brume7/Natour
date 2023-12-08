@@ -58,3 +58,13 @@ exports.logout = catchAsync(async (req, res) => {
   // Redirect to '/'
   res.redirect('/');
 });
+
+exports.getMeView = catchAsync(async (req, res) => {
+  if (!res.locals.user) {
+    return res.redirect('/login');
+  }
+  return res.status(200).render('profile', {
+    title: `Natorus | Profile`,
+    active: `profile`,
+  });
+});
