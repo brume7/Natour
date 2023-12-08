@@ -2,7 +2,7 @@ import '@babel/polyfill';
 import { login } from './login';
 import { mapFunc } from './mapbox';
 import { signUP } from './signUp';
-import { deleteReviewView } from './review';
+import { deleteReviewView, postReviewView } from './review';
 
 const mapDiv = document.getElementById('map');
 let alertClass =
@@ -65,7 +65,21 @@ if (delete_review_btns.length) {
       el.style.display = 'none';
       await deleteReviewView(el.dataset.id, el.dataset.tourid, alertBox, alertClass);
       el.style.display = 'inline';
-      location.reload();
     });
   }
+}
+
+const reviewForm = document.getElementById('review-form');
+
+if (reviewForm) {
+  const tourid = reviewForm.dataset.tourid;
+
+  reviewForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const review = document.getElementById('review-box').value;
+    const rating = document.getElementById('star-1').dataset.rating;
+    reviewForm.style.display = 'none';
+    await postReviewView(parseInt(rating), review.trim(), tourid, alertBox, alertClass);
+    reviewForm.style.display = 'flex';
+  });
 }

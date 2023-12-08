@@ -58,11 +58,13 @@ block content
     section.section-map
       #map(data-locations=`${JSON.stringify(tour.locations)}`)
     section.section-reviews
+      - let showCreateReview = true
       .reviews
         each review in tour.reviews
           .reviews__card.relative
             if user
               - if (user.id == review.user['id'] || user.role =='admin'){
+              - if (user.id == review.user['id']){ showCreateReview = false}
               i.fa-solid.absolute(class='right-[2rem] top-[2rem] text-[#dd0000] cursor-pointer text-lg fa-trash hover:fa-trash-can' data-id=`${review.id}` data-tourId=`${tour.id}` id='delete-review-btn')
               -}
             .reviews__avatar
@@ -73,6 +75,20 @@ block content
               each star in [1,2,3,4,5]
                 svg(class=`reviews__star reviews__star--${star <= review.rating ? 'active':'inactive'}`)
                   use(xlink:href='/img/icons.svg#icon-star')
+
+      if user
+        - if (showCreateReview){
+        form#review-form(data-tourid=`${tour.id}` class=' min-h-[240px] max-w-[100%] mx-auto py-[60px] flex items-center flex-col  w-[500px]')
+          h1(class='text-white text-3xl uppercase mb-[80px] font-bold font-sans') leave a review
+          .flex.space-x-3
+            - let userRating = 0
+            each star in [1,2,3,4,5]
+              svg.w-12.h-12(xmlns='http://www.w3.org/2000/svg' viewbox='0 0 20 20' fill='currentColor' class=`text-${userRating>=star ? 'yellow-500':'grey-500'}   cursor-pointer` id=`star-${star}` data-rating=`${userRating}`)
+                path(d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z')
+          textarea#review-box(name="review", class='mt-[30px] outline-green-500 rounded w-[300px] font-bold text-black p-4 h-[150px] text-lg font-sans') 
+          button(type="submit", class='h-[50px]  w-[100px] rounded-full bg-white font-bold text-black  mt-[30px] hover:bg-green-100' ) submit
+        - }
+
     section.section-cta
       .cta(class='mx-auto max-w-[1440px] px-2')
         .cta__img.cta__img--logo
@@ -85,3 +101,40 @@ block content
           h2.heading-secondary What are you waiting for?
           p.cta__text #{tour.duration} days. 1 adventure. Infinite memories. Make it yours today!
           button.btn.btn--green.span-all-rows Book tour now!
+    script.
+      document.addEventListener('DOMContentLoaded', function() {
+        // Add event listeners using JavaScript
+        for (let star = 1; star <= 5; star++) {
+          document.getElementById(`star-${star}`).addEventListener('click', function() {
+            setUserRating(star);
+          });
+          document.getElementById(`star-${star}`).addEventListener('mouseover', function() {
+            for (let i = 1; i <= star; i++) {
+              document.getElementById(`star-${i}`).classList.add('!text-yellow-100')
+            }
+          });
+          document.getElementById(`star-${star}`).addEventListener('mouseleave', function() {
+            for (let i = 1; i <= star; i++) {
+              document.getElementById(`star-${i}`).classList.remove('!text-yellow-100')
+            }
+          })
+
+
+        }
+      });
+
+
+      function setUserRating(rating) {
+        userRating = rating;
+        renderStars();
+      }
+
+      function renderStars() {
+        for (let star = 1; star <= 5; star++) {
+          const starElement = document.getElementById(`star-${star}`);
+          starElement.classList.remove('text-yellow-500', 'text-grey-500','text-yellow-100');
+          starElement.classList.add(`text-${userRating >= star ? 'yellow-500' : 'grey-500'}`);
+          starElement.removeAttribute('data-rating')
+          starElement.setAttribute('data-rating', userRating)
+        }
+      }

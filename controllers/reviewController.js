@@ -10,8 +10,9 @@ const { getTourView } = require('./viewController');
 
 exports.createReview = catchAsync(async (req, res, next) => {
   const filteredBody = filterObj(req.body, 'review', 'rating', 'tour');
-  filteredBody.user = !filteredBody.user ? req.user._id : filteredBody.user;
+  filteredBody.user = !filteredBody.user ? req.user.id : filteredBody.user;
   filteredBody.tour = !filteredBody.tour ? req.params.tourId : filteredBody.tour;
+  console.log(filteredBody);
   const review = await Review.create(filteredBody);
   res.status(201).json({
     status: 'success',
