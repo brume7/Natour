@@ -6,7 +6,7 @@ const {
   restrictTo,
   forgotPassword,
   resetPassword,
-  updatePassword
+  updatePassword,
 } = require('../controllers/authController');
 const {
   getAllUsers,
@@ -16,7 +16,7 @@ const {
   deleteUser,
   updateMe,
   deleteMe,
-  getMe
+  getMe,
 } = require('./../controllers/userController');
 
 const router = express.Router();

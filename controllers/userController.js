@@ -14,7 +14,7 @@ exports.getUser = catchAsync(async ({ params }, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    data: user
+    data: user,
   });
 });
 
@@ -28,21 +28,22 @@ exports.getMe = (req, res, next) => {
   next();
 };
 exports.updateMe = catchAsync(async (req, res, next) => {
-  const filteredBody = filterObj(req.body, 'photo', 'name', 'email');
+  const filteredBody = filterObj(req.body, 'photo', 'name');
 
   const user = await User.findByIdAndUpdate(req.user._id, filteredBody, {
     new: true,
-    runValidators: true
+    runValidators: true,
   });
 
   return res.status(200).json({
     status: 'success',
-    message: 'Profile updated'
+    message: 'Profile updated',
   });
 });
+
 exports.deleteMe = catchAsync(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.user._id, { active: false });
   res.status(204).json({
-    status: 'success'
+    status: 'success',
   });
 });

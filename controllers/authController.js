@@ -112,6 +112,7 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
       return next();
     }
 
+    req.user = currentUser;
     res.locals.user = currentUser;
     return next(); //grant access
   }

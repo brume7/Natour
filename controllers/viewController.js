@@ -1,4 +1,6 @@
 const Tour = require('../models/tourModel');
+const User = require('../models/userModel');
+const filterObj = require('../utils/filterObj');
 const catchAsync = require('./../utils/catchAsync');
 const nonce = require('crypto').randomBytes(16).toString('base64');
 
@@ -67,4 +69,15 @@ exports.getMeView = catchAsync(async (req, res) => {
     title: `Natorus | Profile`,
     active: `profile`,
   });
+});
+
+exports.updateMeView = catchAsync(async (req, res, next) => {
+  const filteredBody = filterObj(req.body, 'name');
+
+  const user = await User.findByIdAndUpdate(req.user.id, filteredBody, {
+    new: true,
+    runValidators: true,
+  });
+
+  return res.redirect('/me');
 });

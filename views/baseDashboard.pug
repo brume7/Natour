@@ -9,34 +9,70 @@ block content
                     li(class=`pl-0 lg:pl-[30px] ${active == 'profile' ? 'active-board':''}`)
                         a(href="#" class='flex lg:hidden justify-center')
                             svg
-                                use(xlink:href='img/icons.svg#icon-settings')
+                                use(xlink:href='/img/icons.svg#icon-settings')
                         a(href='/me' class='hidden lg:flex')
                             svg
-                                use(xlink:href='img/icons.svg#icon-settings')
+                                use(xlink:href='/img/icons.svg#icon-settings')
                             | Settings
                     li(class=`pl-0 lg:pl-[30px] ${active == '' ? 'active-board':''}`)
                         a(href="#" class='flex lg:hidden justify-center')
                             svg
-                                use(xlink:href='img/icons.svg#icon-briefcase')
+                                use(xlink:href='/img/icons.svg#icon-briefcase')
                         a(href='#' class='hidden lg:flex')
                             svg
-                                use(xlink:href='img/icons.svg#icon-briefcase')
+                                use(xlink:href='/img/icons.svg#icon-briefcase')
                             | My bookings
                     li(class=`pl-0 lg:pl-[30px] ${active == '' ? 'active-board':''}`)
                         a(href="#" class='flex lg:hidden justify-center')
                             svg
-                                use(xlink:href='img/icons.svg#icon-star')
+                                use(xlink:href='/img/icons.svg#icon-star')
                         a(href='#' class='hidden lg:flex')
                             svg
-                                use(xlink:href='img/icons.svg#icon-star')
+                                use(xlink:href='/img/icons.svg#icon-star')
                             | My reviews
                     li(class=`pl-0 lg:pl-[30px] ${active == '' ? 'active-board':''}`)
                         a(href="#" class='flex lg:hidden justify-center')
                             svg
-                                use(xlink:href='img/icons.svg#icon-credit-card')
+                                use(xlink:href='/img/icons.svg#icon-credit-card')
                         a(href='#' class='hidden lg:flex')
                             svg
-                                use(xlink:href='img/icons.svg#icon-credit-card')
+                                use(xlink:href='/img/icons.svg#icon-credit-card')
                             | Billing
+                    -if (user.role == 'admin'){
+                    hr
+                    ul.flex.flex-col(class='gap-y-[10px] mt-[70px]')
+                        li(class=`pl-0 lg:pl-[30px] ${active == '' ? 'active-board':''}`)
+                            a(href='#' class='hidden lg:flex')
+                                svg
+                                    use(xlink:href='/img/icons.svg#icon-map')
+                                | Manage tours
+                            a(href="#" class='flex lg:hidden justify-center')
+                                svg
+                                    use(xlink:href='/img/icons.svg#icon-map')
+                        li(class=`pl-0 lg:pl-[30px] ${active == '' ? 'active-board':''}`)
+                            a(href='#' class='hidden lg:flex')
+                                svg
+                                    use(xlink:href='/img/icons.svg#icon-users')
+                                | Manage users
+                            a(href="#" class='flex lg:hidden justify-center')
+                                svg
+                                    use(xlink:href='/img/icons.svg#icon-users')
+                        li(class=`pl-0 lg:pl-[30px] ${active == '' ? 'active-board':''}`)
+                            a(href='#' class='hidden lg:flex')
+                                svg
+                                    use(xlink:href='/img/icons.svg#icon-star')
+                                | Manage reviews
+                            a(href="#" class='flex lg:hidden justify-center')
+                                svg
+                                    use(xlink:href='/img/icons.svg#icon-star')
+                        li(class=`pl-0 lg:pl-[30px] ${active == '' ? 'active-board':''}`)
+                            a(href='#' class='hidden lg:flex')
+                                svg
+                                    use(xlink:href='/img/icons.svg#icon-briefcase')
+                                | Manage Bookings
+                            a(href="#" class='flex lg:hidden justify-center')
+                                svg
+                                    use(xlink:href='/img/icons.svg#icon-briefcase')
+                    -}
             .min-h-full.bg-white(class='w-full py-[70px]')
                 block board
